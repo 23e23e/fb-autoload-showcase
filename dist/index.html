@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FB Autoload: рабочий проект автоматизации рекламных операций. Архитектура, восстановление после сбоев и разработка с AI.">
+  <meta name="theme-color" content="#101c26">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>FB Autoload — от ручных запусков к системе</title>
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">К содержанию</a>
+  <header class="header wrap">
+    <a class="brand" href="#" aria-label="FB Autoload — начало"><img src="assets/mark.svg" width="32" height="32" alt="">FB Autoload<span class="brand-detail">/ case study</span></a>
+    <nav aria-label="Разделы"><a href="#demo">Демо</a><a href="#architecture">Архитектура</a><a href="#role">Мой вклад <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> Рабочий продукт · разработан с AI</div>
+        <h1 id="hero-title">Рекламные<br>операции.<br><span>Под контролем.</span></h1>
+        <p class="intro">Из десятков ручных действий — в одну управляемую цепочку. Запуск кампаний Meta, восстановление после сбоев и отчётность в собственном приложении.</p>
+        <div class="hero-actions"><a class="button primary" href="#demo">Посмотреть в действии <span aria-hidden="true">↗</span></a><a class="text-link" href="#architecture">Как устроено <span aria-hidden="true">↓</span></a></div>
+        <p class="disclosure">Публичный разбор закрытого проекта.<br>Интерфейсы и данные на странице — демонстрационные.</p>
+      </div>
+      <div class="product-visual" aria-label="Иллюстрация управляемого запуска на вымышленных данных">
+        <div class="console-title"><span><i class="console-mark"></i> Operations / launch-demo</span><span class="small-badge">DEMO</span></div>
+        <div class="console-main">
+          <div class="console-heading"><div><span class="muted-label">РАБОЧИЙ ПРОЦЕСС</span><h2>Запуск кампании</h2></div><span class="status working">В работе</span></div>
+          <div class="console-config"><span>Каталог</span><span>Видео</span><span>Контур A</span></div>
+          <ol class="pipeline">
+            <li class="done"><span class="step-mark">✓</span><div><strong>Проверка ресурсов</strong><small>Кабинет, доступы, медиа</small></div><span class="step-state">verified</span></li>
+            <li class="done"><span class="step-mark">✓</span><div><strong>Загрузка медиа</strong><small>ID сохранены в checkpoint</small></div><span class="step-state">saved</span></li>
+            <li class="done"><span class="step-mark">✓</span><div><strong>Создание кампании</strong><small>ID подтверждён отдельным чтением</small></div><span class="step-state">verified</span></li>
+            <li class="pending"><span class="step-mark">4</span><div><strong>Объявления и проверка</strong><small>Следующий этап цепочки</small></div><span class="step-state">next</span></li>
+          </ol>
+          <div class="console-notice"><span aria-hidden="true">↳</span><p>Каждый этап сохраняется.<br><strong>Следующий — после проверки предыдущего.</strong></p></div>
+        </div>
+        <div class="console-bottom"><span class="live-dot"></span> Прогресс сохранён<span>checkpoint / 03</span></div>
+        <div class="visual-caption"><span>01 / CONTROL PLANE</span><span>Состояние важнее ответа API</span></div>
+      </div>
+    </section>
+    <div class="stack-band"><div class="wrap"><span class="stack-label">СТЕК ПРОЕКТА</span><span>Node.js</span><span>JavaScript</span><span>SQLite</span><span>Playwright</span><span>REST API</span><span>MCP</span></div></div>
+    <section class="overview wrap" aria-labelledby="overview-title">
+      <div class="section-label"><span>01 / ЗАДАЧА</span><span>Не скрипт на один запуск</span></div>
+      <div class="overview-grid"><h2 id="overview-title">Несколько систем.<br>Один процесс.</h2><div><p class="large-copy">Обычный запуск — это файлы, кабинеты, доступы, запросы и ожидание. Если один шаг падает, важно не потерять всё остальное.</p><p>FB Autoload связывает эти шаги в рабочий инструмент: от проверки ресурсов до результата по каждому кабинету. Вместо «кнопка нажата» — понятно, что создано, что сохранено и где требуется решение.</p></div></div>
+      <div class="capabilities"><article><span class="cap-number">01</span><h3>Запустить</h3><p>Прямые, многоязычные и каталожные кампании. Медиа и структура — из выбранного плана.</p></article><article><span class="cap-number">02</span><h3>Продолжить</h3><p>Сохранённые этапы и ID. Сверка перед повтором, а не повтор всего процесса.</p></article><article><span class="cap-number">03</span><h3>Сверить</h3><p>Расход и конверсии из разных источников. Видимые ошибки и неполное покрытие.</p></article></div>
+    </section>
+    <section class="demo-section" id="demo" aria-labelledby="demo-title">
+      <div class="wrap">
+        <div class="section-label"><span>02 / ПОПРОБУЙТЕ СЦЕНАРИЙ</span><span>Без подключения к API</span></div>
+        <div class="demo-grid">
+          <div class="demo-copy"><h2 id="demo-title">Запрос ушёл.<br>Ответ — нет.<br><span>Что дальше?</span></h2><p>Кампания могла создаться, даже если клиент увидел таймаут. Слепой повтор рискует создать дубль.</p><p>Выберите результат проверки. Модель покажет, когда можно продолжить, а когда правильное действие — остановиться.</p><div class="boundary-note">Это отдельная исполняемая модель принципа. Все объекты вымышлены; кнопка не обращается к Meta.</div></div>
+          <div class="demo-panel">
+            <div class="demo-panel-top"><span>RECOVERY LAB</span><span class="small-badge">INTERACTIVE DEMO</span></div>
+            <div class="scenario-tabs" role="group" aria-label="Результат проверки"><button type="button" class="selected" data-scenario="found" aria-pressed="true">Объект найден</button><button type="button" data-scenario="unknown" aria-pressed="false">Ответ неясен</button><button type="button" data-scenario="canceled" aria-pressed="false">Была отмена</button></div>
+            <div class="demo-explanation" id="scenario-copy">Полное чтение подтвердило: кампания уже существует, объявление ещё не создано.</div>
+            <div class="recovery-rows" id="recovery-rows"><div><span>Медиа</span><strong class="green-text">Сохранены</strong></div><div><span>Кампания</span><strong class="amber-text">Нужна сверка</strong></div><div><span>Объявление</span><strong>Ожидает</strong></div></div>
+            <button id="run-demo" class="button primary" type="button" disabled>Проверить и продолжить <span aria-hidden="true">→</span></button>
+            <div id="demo-output" class="demo-output" role="status" aria-live="polite"><strong>Начинаем с сохранённого шага</strong><p>В демо разрешение оператора уже задано. Новая кампания не создаётся автоматически.</p></div>
+            <div class="write-count"><span>Повторных созданий кампании</span><strong id="duplicate-count">0</strong></div>
+            <noscript><p>Интерактивный пример требует JavaScript. Архитектура и описание проекта доступны без него.</p></noscript>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="architecture wrap" id="architecture" aria-labelledby="architecture-title">
+      <div class="section-label"><span>03 / АРХИТЕКТУРА</span><span>Shared code. Separate state.</span></div>
+      <div class="architecture-heading"><h2 id="architecture-title">Общее ядро.<br>Раздельные контуры.</h2><p>Не две копии одного продукта. Одна кодовая база с адаптерами интеграций — и независимые процессы, данные и сессии.</p></div>
+      <div class="architecture-diagram">
+        <div class="core-node"><div><span class="node-label">ОБЩАЯ КОДОВАЯ БАЗА</span><h3>Workflow engine</h3></div><div class="core-functions"><span>План и проверки</span><span>Очередь и блокировки</span><span>Checkpoints</span><span>Результаты и аудит</span></div></div>
+        <div class="connector" aria-hidden="true"><span>два независимых запуска</span></div>
+        <div class="runtime-grid"><article class="runtime"><div class="runtime-top"><span class="runtime-letter">A</span><h3>Контур A</h3><span>RUNTIME</span></div><div class="adapters"><span>AdsPower</span><span>Keitaro</span></div><div class="isolation"><span>Своя база</span><span>Свои сессии</span><span>Свои секреты</span></div></article><article class="runtime"><div class="runtime-top"><span class="runtime-letter">B</span><h3>Контур B</h3><span>RUNTIME</span></div><div class="adapters"><span>Dolphin</span><span>PWA Partners</span><span>Keitaro</span></div><div class="isolation"><span>Своя база</span><span>Свои сессии</span><span>Свои секреты</span></div></article></div>
+        <div class="diagram-caption">Meta — рекламные объекты и статистика · Telegram — раздельные уведомления</div>
+      </div>
+      <div class="decisions"><article><span>РЕШЕНИЕ / 01</span><h3>Неизвестно ≠ не создано</h3><p>Сетевую ошибку нельзя превращать в разрешение на повторную запись. Сначала сверка; при неоднозначности — явная остановка.</p></article><article><span>РЕШЕНИЕ / 02</span><h3>Частичный результат — виден</h3><p>Созданные ресурсы и заблокированные этапы учитываются отдельно. Подготовка не выдаётся за завершённый запуск.</p></article><article><span>РЕШЕНИЕ / 03</span><h3>Отмена остаётся отменой</h3><p>Перезапуск не должен оживлять отменённую задачу. Сохранённые ID и история при этом не теряются.</p></article></div>
+    </section>
+    <section class="role-section" id="role" aria-labelledby="role-title"><div class="wrap">
+      <div class="section-label"><span>04 / МОЙ ВКЛАД</span><span>Product thinking × AI-assisted development</span></div>
+      <div class="role-grid"><div><h2 id="role-title">От рабочей боли —<br>к своему продукту.</h2><p class="large-copy">Я не начал с идеи «попробовать нейросеть». Я начал с процесса, который хотелось перестать делать вручную.</p></div><div class="role-details"><div><span>01</span><p><strong>Постановка и приоритеты</strong>Определял реальные сценарии, ограничения и критерии результата.</p></div><div><span>02</span><p><strong>Разработка с AI</strong>Использовал нейросети для исследования API, реализации, анализа ошибок и подготовки тестов.</p></div><div><span>03</span><p><strong>Проверка в работе</strong>Проверял поведение на реальных задачах. Ошибки превращал в требования и регрессионные сценарии.</p></div></div></div>
+      <div class="closing"><div><span class="eyebrow">ГЛАВНАЯ ИДЕЯ</span><p>Автоматизация ценна не тем,<br>что нажимает быстрее.<br><strong>А тем, что не теряет контекст.</strong></p></div><a href="#demo" class="closing-link" aria-label="Вернуться к интерактивному примеру">↗</a></div>
+    </div></section>
+  </main>
+  <footer class="wrap"><a class="brand" href="#"><img src="assets/mark.svg" width="26" height="26" alt="">FB Autoload</a><p>Портфолио рабочего проекта · Демо без производственных данных</p><a href="#main">Наверх ↑</a></footer>
+</body>
+</html>
