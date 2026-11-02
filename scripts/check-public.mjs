@@ -6,9 +6,9 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("..", import.meta.url));
 const allowed = new Set([
   ".gitignore", "README.md", "PUBLISHING.md", "package.json", "docs/engineering.md", "FB-Autoload.html",
-  "dist/index.html", "dist/style.css", "dist/app.js", "dist/recovery.mjs",
+  "dist/index.html", "dist/style.css", "dist/app.js", "dist/recovery.mjs", "dist/launch-demo.mjs",
   "dist/assets/cover.svg", "dist/assets/mark.svg", "scripts/preview.mjs",
-  "scripts/check-public.mjs", "scripts/build-preview.mjs", "tests/recovery.test.mjs", ".github/workflows/pages.yml",
+  "scripts/check-public.mjs", "scripts/build-preview.mjs", "tests/recovery.test.mjs", "tests/launch-demo.test.mjs", ".github/workflows/pages.yml",
 ]);
 const files = [];
 async function collect(directory, prefix = "") {
