@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FB Autoload: рабочий проект автоматизации рекламных операций. Архитектура, восстановление после сбоев и разработка с AI.">
+  <meta name="theme-color" content="#101c26">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OgNhzL7rrIU65wYyNYcDK66OmKTAGlM+4ktEz/ohIhQ='; style-src 'sha256-x/XW+uB14CRnJHYc502K2aKiKrL2ktG7K18c8KQQex8='; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>FB Autoload — от ручных запусков к системе</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iMTAiIGZpbGw9IiMxNjIzMmMiLz48cGF0aCBkPSJNMTAgMjhWMTJoN3YxNk0yMyAyOFYxMmg3IiBmaWxsPSJub25lIiBzdHJva2U9IiNiYWYzNmIiIHN0cm9rZS13aWR0aD0iMyIvPjxwYXRoIGQ9Ik0xNyAyMGgxMyIgc3Ryb2tlPSIjYmFmMzZiIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4K" type="image/svg+xml">
+  <style>:root{--paper:#f5f5f0;--ink:#16232c;--muted:#626c71;--line:#d8dedb;--mint:#baf36b;--deep:#101c26;--panel:#182731;--green:#2d6846;--amber:#86540c;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
+.working{color:#baf36b;background:#263b32}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:32px}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}button,a{-webkit-tap-highlight-color:transparent}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}button:disabled{cursor:wait}a:focus-visible,button:focus-visible{outline:3px solid #477bd8;outline-offset:5px}h1,h2,h3,p{margin:0}h1,h2,h3{line-height:1.1;font-weight:650}p+p{margin-top:18px}h2{font-size:44px;letter-spacing:-1.7px}.wrap{width:min(1240px,calc(100% - 96px));margin-inline:auto}.skip{position:fixed;top:-80px;left:16px;background:white;padding:12px;z-index:20}.skip:focus{top:12px}.header{height:100px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:700;letter-spacing:-.6px}.brand-detail{font:12px var(--mono);color:var(--muted);letter-spacing:0;margin-left:8px}.header nav{display:flex;gap:32px;font-size:14px}.header nav a:hover,.text-link:hover{color:var(--green)}.hero{display:grid;grid-template-columns:1fr 1.03fr;gap:55px;padding-top:76px;padding-bottom:80px;align-items:center}.eyebrow,.section-label,.node-label,.muted-label{font:11px/1.5 var(--mono);letter-spacing:1.2px;text-transform:uppercase}.eyebrow{display:flex;gap:9px;align-items:center;margin-bottom:24px}.live-dot{width:7px;height:7px;background:var(--green);display:inline-block;border-radius:50%;flex-shrink:0}h1{font-size:clamp(42px,4.9vw,69px);letter-spacing:-3.5px;line-height:1.02;margin-bottom:26px}h1>span{color:var(--green)}.intro{font-size:18px;line-height:1.65;max-width:475px;color:#526069}.hero-actions{display:flex;gap:26px;align-items:center;margin-top:30px}.button{display:inline-flex;align-items:center;justify-content:space-between;gap:24px;border:0;border-radius:6px;font-weight:600;font-size:14px;min-height:50px;padding:14px 20px;transition:background .15s,transform .15s}.primary{background:var(--mint);color:var(--ink)}.primary:hover{background:#cef991;transform:translateY(-1px)}.text-link{font-size:14px;border-bottom:1px solid #9ba5a6;padding-bottom:2px}.disclosure{font-size:11px;line-height:1.7;color:var(--muted);margin-top:22px}.product-visual{background:var(--deep);color:#f4f6f8;border-radius:12px;border:1px solid #34434a;box-shadow:0 22px 45px -28px #0b273a66;position:relative;margin-bottom:24px;transform:rotate(-1deg)}.console-title{height:52px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2e3c46;padding:0 22px;font:11px var(--mono);color:#abb9c3}.console-title>span:first-child{display:flex;align-items:center;gap:10px}.console-mark{width:12px;height:12px;border:2px solid var(--mint);display:inline-block;border-radius:3px}.small-badge{font:9px var(--mono);letter-spacing:.9px;border:1px solid #46535c;padding:4px 6px;border-radius:4px;white-space:nowrap}.console-main{padding:28px 25px 22px}.console-heading{display:flex;align-items:center;justify-content:space-between;gap:14px}.muted-label{font-size:9px;color:#9facb7}.console-heading h2{font-size:24px;letter-spacing:-.6px;margin-top:7px}.status{font-size:10px;border-radius:20px;padding:5px 9px;white-space:nowrap}.amber{color:#f8d69a;background:#433927}.console-config{display:flex;gap:8px;margin:22px 0 18px}.console-config span{border:1px solid #3a4851;border-radius:4px;color:#bdc8cf;padding:3px 9px;font-size:10px}.pipeline{list-style:none;padding:0;margin:0}.pipeline li{display:flex;align-items:center;gap:13px;min-height:73px;border-bottom:1px solid #293944}.step-mark{display:grid;place-items:center;width:25px;height:25px;border:1px solid #465862;border-radius:50%;font:11px var(--mono);flex-shrink:0}.pipeline li.done .step-mark{color:var(--mint);border-color:#7a9e50}.pipeline strong{font-size:13px;font-weight:550;display:block}.pipeline small{font-size:10px;color:#9babb7;display:block;margin-top:3px}.step-state{margin-left:auto;font:10px var(--mono);color:#9babb7}.attention{color:#f7d39a}.attention .step-mark{border-color:#ac8548}.pending{color:#9eacb6}.console-notice{display:flex;gap:14px;padding:17px 14px;background:#1d3039;border-left:2px solid var(--mint);margin-top:22px;font-size:11px;line-height:1.65;color:#c4d0d7}.console-notice>span{font-size:22px;color:var(--mint)}.console-notice strong{font-weight:550;color:#e2e9eb}.console-bottom{display:flex;gap:8px;align-items:center;padding:13px 22px;font:10px var(--mono);color:#a7b7c2;border-top:1px solid #2e3c46}.console-bottom .live-dot{background:var(--mint);width:5px;height:5px}.console-bottom>span:last-child{margin-left:auto}.visual-caption{position:absolute;bottom:-30px;display:flex;justify-content:space-between;width:100%;font:9px var(--mono);color:var(--muted);letter-spacing:.25px}.stack-band{border-block:1px solid var(--line)}.stack-band>.wrap{display:flex;justify-content:space-between;gap:18px;align-items:center;min-height:77px;font-size:16px;font-weight:550}.stack-label{font:10px var(--mono);letter-spacing:1px;color:var(--muted)}.overview,.architecture{padding-block:85px}.section-label{display:flex;justify-content:space-between;margin-bottom:48px;color:var(--muted);font-size:10px}.section-label>span:last-child{letter-spacing:.4px;text-transform:none}.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px}.overview-grid>div>p:last-child{color:var(--muted);font-size:15px}.large-copy{font-size:21px;line-height:1.55;letter-spacing:-.4px}.capabilities{display:grid;grid-template-columns:repeat(3,1fr);margin-top:52px;border-top:1px solid var(--line)}.capabilities article{padding:30px 30px 0 0}.capabilities article+article{border-left:1px solid var(--line);padding-left:30px}.cap-number{font:11px var(--mono);color:var(--green)}.capabilities h3{font-size:24px;margin:14px 0}.capabilities p{font-size:14px;color:var(--muted);max-width:300px}.demo-section{padding-block:78px;background:var(--deep);color:#f5f8fa}.demo-section .section-label{color:#a4b2bc}.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}.demo-copy h2{font-size:52px;line-height:1.06;letter-spacing:-2px;margin-bottom:25px}.demo-copy h2 span{color:var(--mint)}.demo-copy>p{font-size:15px;color:#b5c1ca;max-width:415px}.boundary-note{font:11px/1.7 var(--mono);border-left:1px solid #6e884f;padding-left:15px;margin-top:30px;max-width:400px;color:#a4b3bf}.demo-panel{background:var(--panel);border:1px solid #35444e;border-radius:10px;padding:26px}.demo-panel-top{display:flex;align-items:center;justify-content:space-between;color:#bac6d0;font:11px var(--mono);letter-spacing:.7px}.scenario-tabs{margin-top:23px;display:flex;gap:4px;background:#101e27;padding:4px;border-radius:6px}.scenario-tabs button{flex:1;font-size:11px;padding:10px 3px;border:0;border-radius:4px;background:none;color:#aabbc8;white-space:nowrap}.scenario-tabs button.selected{background:#32444e;color:#fff}.scenario-tabs button:hover{background:#293b45;color:#fff}.demo-explanation{min-height:65px;font-size:12px;color:#b6c4ce;line-height:1.6;margin-top:20px}.recovery-rows{margin-bottom:23px}.recovery-rows>div{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #33434e;font-size:12px}.recovery-rows strong{font-weight:500;color:#a7bac8}.recovery-rows .green-text{color:var(--mint)}.recovery-rows .amber-text{color:#edc587}.demo-panel>.button{width:100%;min-height:46px;font-size:13px}.demo-output{min-height:114px;padding-top:24px}.demo-output strong{font-size:14px;font-weight:550;display:block}.demo-output p{font-size:11px;color:#b4c2cd;line-height:1.65;margin-top:8px}.write-count{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:12px;border-top:1px solid #35444e;color:#a7b8c3;font-size:10px}.write-count strong{font:23px var(--mono);color:var(--mint)}.architecture-heading{display:flex;justify-content:space-between;gap:70px;align-items:center;margin-bottom:40px}.architecture-heading>p{font-size:15px;color:var(--muted);max-width:440px}.architecture-diagram{padding:36px 44px 22px;background:#eaeeea;border-radius:10px;border:1px solid var(--line)}.core-node{display:flex;align-items:center;justify-content:space-between;background:white;border:1px solid #bcc6bf;border-radius:7px;padding:28px;gap:30px}.node-label{font-size:9px;color:var(--green)}.core-node h3{font-size:26px;letter-spacing:-.8px;margin-top:8px}.core-functions{display:grid;grid-template-columns:1fr 1fr;gap:10px 27px;font-size:12px;color:#53635d}.core-functions span:before{content:"+";color:var(--green);padding-right:7px}.connector{height:75px;display:flex;justify-content:center;align-items:center;position:relative}.connector:before{position:absolute;content:"";width:1px;height:100%;background:#9aac9f;top:0;left:50%}.connector:after{position:absolute;content:"";width:52%;height:17px;border:1px solid #9aac9f;border-bottom:0;bottom:0;border-radius:7px 7px 0 0}.connector span{font:9px var(--mono);color:var(--muted);z-index:1;background:#eaeeea;padding:3px 9px}.runtime-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}.runtime{border:1px solid #bcc6bf;background:var(--paper);border-radius:7px;padding:24px}.runtime-top{display:flex;align-items:center;gap:10px}.runtime-letter{border:1px solid #a7b7a9;width:28px;height:28px;display:grid;place-items:center;font:12px var(--mono);border-radius:4px;color:var(--green)}.runtime-top h3{font-size:18px;letter-spacing:-.5px}.runtime-top>span:last-child{font:9px var(--mono);margin-left:auto;color:var(--muted)}.adapters{display:flex;flex-wrap:wrap;gap:7px;margin-block:20px}.adapters span{font-size:11px;background:#e4eae3;padding:5px 9px;border-radius:3px;color:#3f5447}.isolation{border-top:1px dashed #c1cbc1;padding-top:17px;display:flex;justify-content:space-between;gap:10px;font:9px var(--mono);color:#63756a}.diagram-caption{text-align:center;font:10px/1.6 var(--mono);color:var(--muted);margin-top:25px}.decisions{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;margin-top:45px}.decisions article>span{font:9px var(--mono);color:var(--green);letter-spacing:.5px}.decisions h3{font-size:20px;line-height:1.25;letter-spacing:-.5px;margin:13px 0}.decisions p{font-size:13px;color:var(--muted)}.role-section{background:#e9ede6;padding-block:74px 0;border-top:1px solid var(--line)}.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:90px}.role-grid h2{font-size:40px;margin-bottom:25px}.role-grid .large-copy{font-size:18px;max-width:440px;color:#526158}.role-details>div{display:flex;gap:20px;padding-bottom:22px}.role-details>div>span{font:10px var(--mono);color:var(--green);padding-top:4px}.role-details p{font-size:13px;color:var(--muted)}.role-details strong{display:block;color:var(--ink);font-size:16px;margin-bottom:7px;font-weight:600}.closing{margin-top:58px;padding-block:45px 55px;border-top:1px solid #bdc9bf;display:flex;align-items:center;justify-content:space-between}.closing .eyebrow{font-size:10px;color:var(--green);margin-bottom:16px}.closing p{font-size:30px;line-height:1.3;letter-spacing:-.9px}.closing p strong{font-weight:600}.closing-link{display:grid;place-items:center;width:76px;height:76px;border-radius:50%;background:var(--mint);font-size:40px;line-height:1}.closing-link:hover{background:#cef991}footer{display:flex;align-items:center;justify-content:space-between;gap:25px;padding-block:30px}footer .brand{font-size:16px}footer p,footer>a:last-child{font-size:10px;color:var(--muted)}
+@media(min-width:1550px){.hero{gap:80px;padding-block:95px}.hero h1{font-size:72px}}
+@media(max-width:1100px){.wrap{width:calc(100% - 64px)}.hero{gap:30px}h1{font-size:54px}.hero-actions{gap:16px}.hero-actions .button{font-size:12px;gap:16px;padding-inline:14px}.text-link{font-size:12px}.console-heading{display:block}.console-heading .status{display:inline-block;margin-top:12px}.console-main{padding:23px 20px}.step-state{display:none}.demo-grid{gap:36px}.demo-copy h2{font-size:46px}.demo-panel{padding:23px 20px}.overview-grid{gap:40px}.architecture-heading{gap:40px}.architecture-diagram{padding-inline:25px}.core-functions{gap:10px 15px}.role-grid{gap:50px}.role-grid h2{font-size:34px}.isolation{font-size:8px}}
+@media(max-width:800px){.wrap{width:calc(100% - 40px)}.header{height:78px}.brand{font-size:17px}.brand-detail{display:none}.header nav{gap:19px;font-size:12px}.header nav a:last-child{display:none}.hero{grid-template-columns:1fr;padding-top:45px;padding-bottom:60px;gap:43px}.hero h1{font-size:clamp(47px,8.7vw,69px);letter-spacing:-2.5px}.intro{font-size:17px;max-width:550px}.hero-actions .button{font-size:14px;padding-inline:20px}.text-link{font-size:13px}.product-visual{transform:none;max-width:570px;width:100%;justify-self:center}.console-heading{display:flex}.console-heading .status{margin-top:0}.step-state{display:block}.console-main{padding:25px}.stack-band>.wrap{justify-content:flex-start;flex-wrap:wrap;gap:16px 25px;padding-block:20px;font-size:13px}.stack-label{width:100%}.overview,.architecture{padding-block:55px}.section-label{margin-bottom:30px;font-size:9px}.section-label>span:last-child{display:none}h2{font-size:36px;letter-spacing:-1.2px}.overview-grid{grid-template-columns:1fr;gap:24px}.large-copy{font-size:19px}.capabilities{margin-top:30px;gap:20px}.capabilities article{padding:23px 0 0}.capabilities article+article{padding-left:0;border-left:0}.capabilities h3{font-size:20px}.capabilities p{font-size:12px}.demo-section{padding-block:50px}.demo-grid{grid-template-columns:1fr;gap:35px}.demo-copy h2{font-size:44px}.demo-copy>p{max-width:550px}.boundary-note{max-width:100%}.demo-panel{max-width:570px;width:100%;justify-self:center;padding:25px}.demo-explanation{min-height:47px}.architecture-heading{display:block}.architecture-heading p{margin-top:20px;max-width:100%}.core-node{display:block;padding:22px}.core-functions{margin-top:22px;gap:10px;font-size:11px}.architecture-diagram{padding:20px 16px}.runtime-grid{gap:13px}.runtime{padding:16px 12px}.runtime-top h3{font-size:16px}.runtime-top>span:last-child{display:none}.isolation{flex-direction:column;gap:7px;font-size:10px}.adapters{min-height:62px;align-content:start;margin-block:16px}.decisions{gap:22px}.decisions h3{font-size:18px}.decisions p{font-size:12px}.role-section{padding-top:50px}.role-grid{grid-template-columns:1fr;gap:30px}.role-grid h2{font-size:35px}.role-details>div{gap:18px}.closing{margin-top:20px;padding-block:30px 40px}.closing p{font-size:24px}.closing-link{width:55px;height:55px;font-size:29px;flex-shrink:0;margin-left:10px}footer{flex-wrap:wrap;gap:15px;padding-block:24px}footer p{order:3;width:100%}footer>a:last-child{margin-left:auto}}
+@media(max-width:400px){.header nav{gap:14px}.hero h1{font-size:46px}.hero-actions{gap:14px}.hero-actions .button{font-size:12px;gap:12px;padding-inline:14px}.console-main{padding-inline:18px}.console-heading h2{font-size:21px}.console-heading .status{font-size:9px}.step-state{display:none}.console-title{padding-inline:16px}.console-title>span:first-child{font-size:9px}.visual-caption{font-size:8px}.capabilities,.decisions{grid-template-columns:1fr}.capabilities article{border-bottom:1px solid var(--line);padding-bottom:20px}.capabilities p{max-width:100%;font-size:14px}.capabilities h3{margin-block:10px}.decisions p{font-size:14px}.demo-panel{padding:20px 15px}.scenario-tabs button{font-size:10px}.demo-panel-top{font-size:10px}.small-badge{font-size:8px}.closing p{font-size:21px}.core-functions{font-size:10px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media print{body{background:white;color:#16232c}.header nav,.hero-actions,.closing-link,.scenario-tabs,#run-demo{display:none}.wrap{width:100%}.hero{padding-block:25px}.product-visual{transform:none;box-shadow:none}.demo-section{-webkit-print-color-adjust:exact;print-color-adjust:exact}.overview,.architecture,.role-section{padding-block:30px}.section-label{margin-bottom:20px}.architecture-diagram,.demo-panel,.product-visual{break-inside:avoid}a[href]:after{content:none}}
+</style>
+</head>
+<body>
+  <a class="skip" href="#main">К содержанию</a>
+  <header class="header wrap">
+    <a class="brand" href="#" aria-label="FB Autoload — начало"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iMTAiIGZpbGw9IiMxNjIzMmMiLz48cGF0aCBkPSJNMTAgMjhWMTJoN3YxNk0yMyAyOFYxMmg3IiBmaWxsPSJub25lIiBzdHJva2U9IiNiYWYzNmIiIHN0cm9rZS13aWR0aD0iMyIvPjxwYXRoIGQ9Ik0xNyAyMGgxMyIgc3Ryb2tlPSIjYmFmMzZiIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4K" width="32" height="32" alt="">FB Autoload<span class="brand-detail">/ case study</span></a>
+    <nav aria-label="Разделы"><a href="#demo">Демо</a><a href="#architecture">Архитектура</a><a href="#role">Мой вклад <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> Рабочий продукт · разработан с AI</div>
+        <h1 id="hero-title">Рекламные<br>операции.<br><span>Под контролем.</span></h1>
+        <p class="intro">Из десятков ручных действий — в одну управляемую цепочку. Запуск кампаний Meta, восстановление после сбоев и отчётность в собственном приложении.</p>
+        <div class="hero-actions"><a class="button primary" href="#demo">Посмотреть в действии <span aria-hidden="true">↗</span></a><a class="text-link" href="#architecture">Как устроено <span aria-hidden="true">↓</span></a></div>
+        <p class="disclosure">Публичный разбор закрытого проекта.<br>Интерфейсы и данные на странице — демонстрационные.</p>
+      </div>
+      <div class="product-visual" aria-label="Иллюстрация управляемого запуска на вымышленных данных">
+        <div class="console-title"><span><i class="console-mark"></i> Operations / launch-demo</span><span class="small-badge">DEMO</span></div>
+        <div class="console-main">
+          <div class="console-heading"><div><span class="muted-label">РАБОЧИЙ ПРОЦЕСС</span><h2>Запуск кампании</h2></div><span class="status working">В работе</span></div>
+          <div class="console-config"><span>Каталог</span><span>Видео</span><span>Контур A</span></div>
+          <ol class="pipeline">
+            <li class="done"><span class="step-mark">✓</span><div><strong>Проверка ресурсов</strong><small>Кабинет, доступы, медиа</small></div><span class="step-state">verified</span></li>
+            <li class="done"><span class="step-mark">✓</span><div><strong>Загрузка медиа</strong><small>ID сохранены в checkpoint</small></div><span class="step-state">saved</span></li>
+            <li class="done"><span class="step-mark">✓</span><div><strong>Создание кампании</strong><small>ID подтверждён отдельным чтением</small></div><span class="step-state">verified</span></li>
+            <li class="pending"><span class="step-mark">4</span><div><strong>Объявления и проверка</strong><small>Следующий этап цепочки</small></div><span class="step-state">next</span></li>
+          </ol>
+          <div class="console-notice"><span aria-hidden="true">↳</span><p>Каждый этап сохраняется.<br><strong>Следующий — после проверки предыдущего.</strong></p></div>
+        </div>
+        <div class="console-bottom"><span class="live-dot"></span> Прогресс сохранён<span>checkpoint / 03</span></div>
+        <div class="visual-caption"><span>01 / CONTROL PLANE</span><span>Состояние важнее ответа API</span></div>
+      </div>
+    </section>
+    <div class="stack-band"><div class="wrap"><span class="stack-label">СТЕК ПРОЕКТА</span><span>Node.js</span><span>JavaScript</span><span>SQLite</span><span>Playwright</span><span>REST API</span><span>MCP</span></div></div>
+    <section class="overview wrap" aria-labelledby="overview-title">
+      <div class="section-label"><span>01 / ЗАДАЧА</span><span>Не скрипт на один запуск</span></div>
+      <div class="overview-grid"><h2 id="overview-title">Несколько систем.<br>Один процесс.</h2><div><p class="large-copy">Обычный запуск — это файлы, кабинеты, доступы, запросы и ожидание. Если один шаг падает, важно не потерять всё остальное.</p><p>FB Autoload связывает эти шаги в рабочий инструмент: от проверки ресурсов до результата по каждому кабинету. Вместо «кнопка нажата» — понятно, что создано, что сохранено и где требуется решение.</p></div></div>
+      <div class="capabilities"><article><span class="cap-number">01</span><h3>Запустить</h3><p>Прямые, многоязычные и каталожные кампании. Медиа и структура — из выбранного плана.</p></article><article><span class="cap-number">02</span><h3>Продолжить</h3><p>Сохранённые этапы и ID. Сверка перед повтором, а не повтор всего процесса.</p></article><article><span class="cap-number">03</span><h3>Сверить</h3><p>Расход и конверсии из разных источников. Видимые ошибки и неполное покрытие.</p></article></div>
+    </section>
+    <section class="demo-section" id="demo" aria-labelledby="demo-title">
+      <div class="wrap">
+        <div class="section-label"><span>02 / ПОПРОБУЙТЕ СЦЕНАРИЙ</span><span>Без подключения к API</span></div>
+        <div class="demo-grid">
+          <div class="demo-copy"><h2 id="demo-title">Запрос ушёл.<br>Ответ — нет.<br><span>Что дальше?</span></h2><p>Кампания могла создаться, даже если клиент увидел таймаут. Слепой повтор рискует создать дубль.</p><p>Выберите результат проверки. Модель покажет, когда можно продолжить, а когда правильное действие — остановиться.</p><div class="boundary-note">Это отдельная исполняемая модель принципа. Все объекты вымышлены; кнопка не обращается к Meta.</div></div>
+          <div class="demo-panel">
+            <div class="demo-panel-top"><span>RECOVERY LAB</span><span class="small-badge">INTERACTIVE DEMO</span></div>
+            <div class="scenario-tabs" role="group" aria-label="Результат проверки"><button type="button" class="selected" data-scenario="found" aria-pressed="true">Объект найден</button><button type="button" data-scenario="unknown" aria-pressed="false">Ответ неясен</button><button type="button" data-scenario="canceled" aria-pressed="false">Была отмена</button></div>
+            <div class="demo-explanation" id="scenario-copy">Полное чтение подтвердило: кампания уже существует, объявление ещё не создано.</div>
+            <div class="recovery-rows" id="recovery-rows"><div><span>Медиа</span><strong class="green-text">Сохранены</strong></div><div><span>Кампания</span><strong class="amber-text">Нужна сверка</strong></div><div><span>Объявление</span><strong>Ожидает</strong></div></div>
+            <button id="run-demo" class="button primary" type="button" disabled>Проверить и продолжить <span aria-hidden="true">→</span></button>
+            <div id="demo-output" class="demo-output" role="status" aria-live="polite"><strong>Начинаем с сохранённого шага</strong><p>В демо разрешение оператора уже задано. Новая кампания не создаётся автоматически.</p></div>
+            <div class="write-count"><span>Повторных созданий кампании</span><strong id="duplicate-count">0</strong></div>
+            <noscript><p>Интерактивный пример требует JavaScript. Архитектура и описание проекта доступны без него.</p></noscript>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="architecture wrap" id="architecture" aria-labelledby="architecture-title">
+      <div class="section-label"><span>03 / АРХИТЕКТУРА</span><span>Shared code. Separate state.</span></div>
+      <div class="architecture-heading"><h2 id="architecture-title">Общее ядро.<br>Раздельные контуры.</h2><p>Не две копии одного продукта. Одна кодовая база с адаптерами интеграций — и независимые процессы, данные и сессии.</p></div>
+      <div class="architecture-diagram">
+        <div class="core-node"><div><span class="node-label">ОБЩАЯ КОДОВАЯ БАЗА</span><h3>Workflow engine</h3></div><div class="core-functions"><span>План и проверки</span><span>Очередь и блокировки</span><span>Checkpoints</span><span>Результаты и аудит</span></div></div>
+        <div class="connector" aria-hidden="true"><span>два независимых запуска</span></div>
+        <div class="runtime-grid"><article class="runtime"><div class="runtime-top"><span class="runtime-letter">A</span><h3>Контур A</h3><span>RUNTIME</span></div><div class="adapters"><span>AdsPower</span><span>Keitaro</span></div><div class="isolation"><span>Своя база</span><span>Свои сессии</span><span>Свои секреты</span></div></article><article class="runtime"><div class="runtime-top"><span class="runtime-letter">B</span><h3>Контур B</h3><span>RUNTIME</span></div><div class="adapters"><span>Dolphin</span><span>PWA Partners</span><span>Keitaro</span></div><div class="isolation"><span>Своя база</span><span>Свои сессии</span><span>Свои секреты</span></div></article></div>
+        <div class="diagram-caption">Meta — рекламные объекты и статистика · Telegram — раздельные уведомления</div>
+      </div>
+      <div class="decisions"><article><span>РЕШЕНИЕ / 01</span><h3>Неизвестно ≠ не создано</h3><p>Сетевую ошибку нельзя превращать в разрешение на повторную запись. Сначала сверка; при неоднозначности — явная остановка.</p></article><article><span>РЕШЕНИЕ / 02</span><h3>Частичный результат — виден</h3><p>Созданные ресурсы и заблокированные этапы учитываются отдельно. Подготовка не выдаётся за завершённый запуск.</p></article><article><span>РЕШЕНИЕ / 03</span><h3>Отмена остаётся отменой</h3><p>Перезапуск не должен оживлять отменённую задачу. Сохранённые ID и история при этом не теряются.</p></article></div>
+    </section>
+    <section class="role-section" id="role" aria-labelledby="role-title"><div class="wrap">
+      <div class="section-label"><span>04 / МОЙ ВКЛАД</span><span>Product thinking × AI-assisted development</span></div>
+      <div class="role-grid"><div><h2 id="role-title">От рабочей боли —<br>к своему продукту.</h2><p class="large-copy">Я не начал с идеи «попробовать нейросеть». Я начал с процесса, который хотелось перестать делать вручную.</p></div><div class="role-details"><div><span>01</span><p><strong>Постановка и приоритеты</strong>Определял реальные сценарии, ограничения и критерии результата.</p></div><div><span>02</span><p><strong>Разработка с AI</strong>Использовал нейросети для исследования API, реализации, анализа ошибок и подготовки тестов.</p></div><div><span>03</span><p><strong>Проверка в работе</strong>Проверял поведение на реальных задачах. Ошибки превращал в требования и регрессионные сценарии.</p></div></div></div>
+      <div class="closing"><div><span class="eyebrow">ГЛАВНАЯ ИДЕЯ</span><p>Автоматизация ценна не тем,<br>что нажимает быстрее.<br><strong>А тем, что не теряет контекст.</strong></p></div><a href="#demo" class="closing-link" aria-label="Вернуться к интерактивному примеру">↗</a></div>
+    </div></section>
+  </main>
+  <footer class="wrap"><a class="brand" href="#"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iMTAiIGZpbGw9IiMxNjIzMmMiLz48cGF0aCBkPSJNMTAgMjhWMTJoN3YxNk0yMyAyOFYxMmg3IiBmaWxsPSJub25lIiBzdHJva2U9IiNiYWYzNmIiIHN0cm9rZS13aWR0aD0iMyIvPjxwYXRoIGQ9Ik0xNyAyMGgxMyIgc3Ryb2tlPSIjYmFmMzZiIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4K" width="26" height="26" alt="">FB Autoload</a><p>Портфолио рабочего проекта · Демо без производственных данных</p><a href="#main">Наверх ↑</a></footer>
+<script>let selectedScenario = "found";
+const loadDemoModule = () => {
+function createCheckpoint() {
+  return {
+    scope: "workspace-demo/account-demo/launch-demo",
+    status: "needs_review",
+    canceled: false,
+    mediaId: "media-demo",
+    campaignId: null,
+    adId: null,
+    writes: [],
+    events: ["Медиа сохранены", "Ответ на создание кампании потерян"],
+  };
+}
+
+function continueCheckpoint(checkpoint, observation, { approved = false } = {}) {
+  const next = structuredClone(checkpoint);
+  const stop = (reason) => {
+    next.status = "blocked";
+    next.events.push(reason);
+    return next;
+  };
+  if (next.canceled || next.status === "canceled") {
+    next.canceled = true;
+    next.status = "canceled";
+    next.events.push("Сохранённая отмена: выполнение не возобновлено");
+    return next;
+  }
+  if (next.status === "completed") return next;
+  if (!approved) return stop("Продолжение требует разрешения оператора");
+  if (observation?.scope !== next.scope) return stop("Контекст чтения не совпал с задачей");
+  if (observation?.complete !== true) return stop("Результат чтения неизвестен: новых записей нет");
+  if (observation.mediaId !== next.mediaId) return stop("Сохранённое медиа не подтверждено");
+  if (!Array.isArray(observation.campaignIds) || observation.campaignIds.length !== 1) {
+    return stop("Нет однозначного совпадения: отдельное решение перед новой записью");
+  }
+  const [campaignId] = observation.campaignIds;
+  if (typeof campaignId !== "string" || !campaignId.trim()) return stop("Некорректный ID кампании");
+  if (next.campaignId && next.campaignId !== campaignId) return stop("ID кампании противоречит checkpoint");
+  if (!Array.isArray(observation.adIds) || observation.adIds.length > 1) {
+    return stop("Результат чтения объявлений неоднозначен");
+  }
+  next.campaignId = campaignId;
+  next.events.push("Кампания найдена и переиспользована");
+  if (observation.adIds.length === 1) {
+    const [adId] = observation.adIds;
+    if (typeof adId !== "string" || !adId.trim() || (next.adId && next.adId !== adId)) {
+      return stop("ID объявления противоречит checkpoint");
+    }
+    next.adId = adId;
+    next.events.push("Существующее объявление переиспользовано");
+  } else {
+    if (next.adId) return stop("Подтверждённое объявление не найдено: повтор запрещён");
+    next.adId = "ad-demo";
+    next.writes.push({ action: "simulate_missing_ad", campaignId, adId: next.adId });
+    next.events.push("В модели создано только отсутствующее объявление");
+  }
+  next.status = "completed";
+  return next;
+}
+
+function demoScenario(scenario) {
+  if (!["found", "unknown", "canceled"].includes(scenario)) throw new Error("Unknown demonstration scenario");
+  const checkpoint = createCheckpoint();
+  checkpoint.canceled = scenario === "canceled";
+  return continueCheckpoint(checkpoint, {
+    scope: checkpoint.scope,
+    complete: scenario !== "unknown",
+    mediaId: checkpoint.mediaId,
+    campaignIds: ["campaign-demo"],
+    adIds: [],
+  }, { approved: true });
+}
+
+return { demoScenario };
+};
+const scenarioCopy = {
+  found: "Полное чтение подтвердило: кампания уже существует, объявление ещё не создано.",
+  unknown: "Чтение завершилось ошибкой. Отсутствие ответа не доказывает отсутствие кампании.",
+  canceled: "До перезапуска оператор отменил задачу. Флаг отмены сохранён вместе с её прогрессом.",
+};
+const outcomeCopy = {
+  completed: ["Продолжили, не начали заново", "Кампания и медиа переиспользованы. Модель выполнила только недостающий этап: создание объявления. Реальных запросов не было."],
+  blocked: ["Остановились без новых записей", "Неоднозначный результат не разрешает повтор. Сохранённые медиа остаются; требуется проверка и отдельное решение."],
+  canceled: ["Отмена сохранена", "Перезапуск не возвращает задачу в очередь. Сохранённые объекты и история не удаляются."],
+};
+const runButton = document.getElementById("run-demo");
+const output = document.getElementById("demo-output");
+const rowValues = [...document.querySelectorAll("#recovery-rows strong")];
+
+function resetView() {
+  document.getElementById("scenario-copy").textContent = scenarioCopy[selectedScenario];
+  const values = ["Сохранены", "Нужна сверка", "Ожидает"];
+  rowValues.forEach((node, index) => {
+    node.textContent = values[index];
+    node.className = index === 0 ? "green-text" : index === 1 ? "amber-text" : "";
+  });
+  output.querySelector("strong").textContent = "Начинаем с сохранённого шага";
+  output.querySelector("p").textContent = "В демо разрешение оператора уже задано. Новая кампания не создаётся автоматически.";
+  runButton.textContent = "Проверить и продолжить →";
+  output.removeAttribute("data-result");
+}
+
+for (const button of document.querySelectorAll("[data-scenario]")) {
+  button.addEventListener("click", () => {
+    selectedScenario = button.dataset.scenario;
+    for (const option of document.querySelectorAll("[data-scenario]")) {
+      const selected = option === button;
+      option.classList.toggle("selected", selected);
+      option.setAttribute("aria-pressed", String(selected));
+    }
+    resetView();
+  });
+}
+
+async function connectDemo() {
+  let demoScenario;
+  try {
+    ({ demoScenario } = await loadDemoModule());
+  } catch {
+    output.querySelector("strong").textContent = "Не удалось загрузить модуль демо";
+    output.querySelector("p").textContent = "Откройте презентацию через npm start. Внешние API для этого не нужны.";
+    return;
+  }
+  runButton.disabled = false;
+  runButton.addEventListener("click", () => {
+    const result = demoScenario(selectedScenario);
+    const [title, description] = outcomeCopy[result.status];
+    output.querySelector("strong").textContent = title;
+    output.querySelector("p").textContent = description;
+    output.dataset.result = result.status;
+    const completed = result.status === "completed";
+    rowValues[1].textContent = completed ? "Переиспользована" : result.status === "canceled" ? "Не изменяем" : "Неизвестно";
+    rowValues[2].textContent = completed ? "Создано в модели" : "Не создаём";
+    rowValues[1].className = completed ? "green-text" : "amber-text";
+    rowValues[2].className = completed ? "green-text" : "";
+    document.getElementById("duplicate-count").textContent = String(result.writes.filter(write => write.action === "simulate_campaign").length);
+    runButton.textContent = "Повторить демо ↻";
+  });
+}
+
+connectDemo();
+</script>
+</body>
+</html>
