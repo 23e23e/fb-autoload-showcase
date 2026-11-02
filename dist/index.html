@@ -51,17 +51,35 @@
     </section>
     <section class="demo-section" id="demo" aria-labelledby="demo-title">
       <div class="wrap">
-        <div class="section-label"><span>02 / ПОПРОБУЙТЕ СЦЕНАРИЙ</span><span>Без подключения к API</span></div>
-        <div class="demo-grid">
-          <div class="demo-copy"><h2 id="demo-title">Запрос ушёл.<br>Ответ — нет.<br><span>Что дальше?</span></h2><p>Кампания могла создаться, даже если клиент увидел таймаут. Слепой повтор рискует создать дубль.</p><p>Выберите результат проверки. Модель покажет, когда можно продолжить, а когда правильное действие — остановиться.</p><div class="boundary-note">Это отдельная исполняемая модель принципа. Все объекты вымышлены; кнопка не обращается к Meta.</div></div>
-          <div class="demo-panel">
-            <div class="demo-panel-top"><span>RECOVERY LAB</span><span class="small-badge">INTERACTIVE DEMO</span></div>
-            <div class="scenario-tabs" role="group" aria-label="Результат проверки"><button type="button" class="selected" data-scenario="found" aria-pressed="true">Объект найден</button><button type="button" data-scenario="unknown" aria-pressed="false">Ответ неясен</button><button type="button" data-scenario="canceled" aria-pressed="false">Была отмена</button></div>
-            <div class="demo-explanation" id="scenario-copy">Полное чтение подтвердило: кампания уже существует, объявление ещё не создано.</div>
-            <div class="recovery-rows" id="recovery-rows"><div><span>Медиа</span><strong class="green-text">Сохранены</strong></div><div><span>Кампания</span><strong class="amber-text">Нужна сверка</strong></div><div><span>Объявление</span><strong>Ожидает</strong></div></div>
-            <button id="run-demo" class="button primary" type="button" disabled>Проверить и продолжить <span aria-hidden="true">→</span></button>
-            <div id="demo-output" class="demo-output" role="status" aria-live="polite"><strong>Начинаем с сохранённого шага</strong><p>В демо разрешение оператора уже задано. Новая кампания не создаётся автоматически.</p></div>
-            <div class="write-count"><span>Повторных созданий кампании</span><strong id="duplicate-count">0</strong></div>
+        <div class="section-label"><span>02 / ПОПРОБУЙТЕ ЗАПУСК</span><span>От выбора кампании до результата</span></div>
+        <div class="demo-grid launch-grid">
+          <div class="demo-copy"><h2 id="demo-title">Выбрать.<br>Запустить.<br><span>Увидеть результат.</span></h2><p>Пройдите обычный рабочий сценарий: выберите кампанию, добавьте креативы и отметьте рекламные кабинеты. Приложение соберёт из них план запуска.</p><ol class="demo-story"><li><span>01</span> Кампания и страна</li><li><span>02</span> Выбранные креативы</li><li><span>03</span> Готовые кабинеты</li><li><span>04</span> План → запуск → результат</li></ol><div class="boundary-note">Упрощённая симуляция, не рабочий интерфейс. Все данные вымышлены. Ничего не загружается в Meta, деньги не списываются. Время выполнения условное.</div></div>
+          <div class="demo-panel launch-panel" id="launch-demo" data-step="campaign" data-status="draft">
+            <div class="demo-panel-top"><span>FB AUTOLOAD / ЗАПУСК</span><span class="small-badge">INTERACTIVE DEMO</span></div>
+            <ol class="launch-stepper" aria-label="Этапы запуска"><li class="current" aria-current="step"><span>1</span>Кампания</li><li><span>2</span>Креативы</li><li><span>3</span>Кабинеты</li><li><span>4</span>План</li><li><span>5</span>Результат</li></ol>
+            <div class="launch-caption" id="step-caption">Шаг 1 из 5</div>
+            <section class="launch-stage" data-panel="campaign" aria-labelledby="stage-campaign">
+              <h3 id="stage-campaign" tabindex="-1">Что запускаем?</h3><p class="stage-help">Выберите кампанию из демонстрационного списка.</p>
+              <label class="launch-field" for="demo-campaign">Кампания<select id="demo-campaign"><option value="">Выберите кампанию</option></select></label>
+              <div class="launch-preset"><span>Видео</span><span>Языки</span><span>Purchase</span><span>ABO</span></div><p class="stage-note">В этом примере — один эдсет на креатив. После выбора кабинетов покажем полный план до запуска.</p>
+            </section>
+            <section class="launch-stage" data-panel="creatives" aria-labelledby="stage-creatives" hidden>
+              <h3 id="stage-creatives" tabindex="-1">Добавьте креативы</h3><p class="stage-help">Отметьте демонстрационные видео. Личные файлы не нужны.</p><div class="selection-meta">Выбрано <strong id="creative-count">0 из 3</strong></div><div class="creative-options" id="creative-options"></div>
+            </section>
+            <section class="launch-stage" data-panel="accounts" aria-labelledby="stage-accounts" hidden>
+              <h3 id="stage-accounts" tabindex="-1">На какие кабинеты?</h3><p class="stage-help">Выберите готовые кабинеты. Недоступный выбрать нельзя.</p><div class="selection-meta">Кабинеты <strong id="account-count">0 выбрано</strong></div><div id="account-options"></div>
+            </section>
+            <section class="launch-stage" data-panel="review" aria-labelledby="stage-review" hidden>
+              <h3 id="stage-review" tabindex="-1">Всё на одном экране</h3><p class="stage-help">Проверьте план. Ничего не начинается без подтверждения.</p><dl class="launch-plan"><div><dt>Кампания</dt><dd id="plan-campaign"></dd></div><div><dt>Креативы</dt><dd id="plan-creatives"></dd></div><div><dt>Кабинеты</dt><dd id="plan-accounts"></dd></div><div><dt>Бюджет ABO</dt><dd id="plan-budget"></dd></div></dl><div class="plan-total"><strong id="plan-total"></strong><span id="plan-daily"></span></div>
+            </section>
+            <section class="launch-stage" data-panel="result" aria-labelledby="stage-result" hidden>
+              <h3 id="stage-result" tabindex="-1"><span id="result-heading">Приложение выполняет план</span></h3><p class="stage-help" id="result-summary"></p><div class="progress-meta"><span id="launch-activity">Подготовка выбранных медиа</span><strong id="launch-progress-text">0%</strong></div><progress id="launch-progress" value="0" max="100" aria-label="Выполнение демо-запуска">0%</progress><div class="launch-results" id="launch-results"></div>
+            </section>
+            <div class="launch-actions"><button type="button" class="launch-back" id="demo-back" hidden>← Назад</button><button type="button" class="button primary" id="demo-next" disabled>Продолжить →</button><button type="button" class="button primary" id="demo-start" hidden>Запустить демо →</button><button type="button" class="button primary" id="demo-restart" hidden>Пройти ещё раз ↻</button></div>
+            <p class="launch-status" id="launch-status" role="status" aria-live="polite">Загрузка интерактивного примера…</p>
+            <template id="creative-template"><label class="creative-option"><input type="checkbox"><span class="creative-poster"><span aria-hidden="true">▶</span><small></small></span><span class="option-copy"><strong class="option-name"></strong><small class="option-detail"></small></span></label></template>
+            <template id="account-template"><label class="account-option"><input type="checkbox"><span class="option-copy"><strong class="option-name"></strong><small class="option-detail"></small></span><span class="option-state"></span></label></template>
+            <template id="result-template"><div class="launch-result-row"><span class="result-check" aria-hidden="true">✓</span><span class="option-copy"><strong class="option-name"></strong><small class="option-detail"></small></span><span class="result-state"></span></div></template>
             <noscript><p>Интерактивный пример требует JavaScript. Архитектура и описание проекта доступны без него.</p></noscript>
           </div>
         </div>
