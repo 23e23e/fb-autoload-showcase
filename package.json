@@ -1,0 +1,14 @@
+{
+  "name": "fb-autoload-showcase",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A public-safe engineering case study and offline workflow demonstration.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node scripts/preview.mjs",
+    "build:preview": "node scripts/build-preview.mjs",
+    "test": "node scripts/build-preview.mjs && node --test tests/recovery.test.mjs && node scripts/check-public.mjs",
+    "check:public": "node scripts/check-public.mjs"
+  }
+}
