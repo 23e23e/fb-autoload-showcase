@@ -5,12 +5,14 @@ import { createHash } from "node:crypto";
 const read = relative => readFile(new URL(relative, import.meta.url), "utf8");
 const [template, css, app, model, mark] = await Promise.all([
   read("../dist/index.html"), read("../dist/style.css"), read("../dist/app.js"),
-  read("../dist/recovery.mjs"), read("../dist/assets/mark.svg"),
+  read("../dist/launch-demo.mjs"), read("../dist/assets/mark.svg"),
 ]);
-const loader = 'const loadDemoModule = () => import("./recovery.mjs");';
+const loader = 'const loadDemoModule = () => import("./launch-demo.mjs");';
 assert.equal(app.split(loader).length, 2, "The offline bundle must replace exactly one module loader");
 const bundledModel = model.replace(/^export /gm, "");
-const script = app.replace(loader, `const loadDemoModule = () => {\n${bundledModel}\nreturn { demoScenario };\n};`);
+const exports = [...model.matchAll(/^export (?:function|const) (\w+)/gm)].map(match => match[1]);
+assert.ok(exports.includes("createLaunchDemo"));
+const script = app.replace(loader, `const loadDemoModule = () => {\n${bundledModel}\nreturn { ${exports.join(", ")} };\n};`);
 assert.ok(!/<\/script/i.test(script));
 assert.ok(!/<\/style/i.test(css));
 const hash = value => createHash("sha256").update(value).digest("base64");
@@ -23,6 +25,6 @@ const result = template
   .replaceAll('"assets/mark.svg"', `"${icon}"`)
   .replace("</body>", `<script>${script}</script>\n</body>`);
 assert.ok(!result.includes('src="app.js"'));
-assert.ok(!result.includes('import("./recovery.mjs")'));
+assert.ok(!result.includes('import("./launch-demo.mjs")'));
 await writeFile(new URL("../FB-Autoload.html", import.meta.url), result);
 console.log("Built FB-Autoload.html: self-contained offline preview with hash-based CSP");
