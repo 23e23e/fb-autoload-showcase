@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="520" viewBox="0 0 1280 520" role="img" aria-labelledby="title description">
+<title id="title">FB Autoload — рекламные операции под контролем</title><desc id="description">Рабочий продукт, разработанный с AI. Общая кодовая база, независимые контуры, сохранённый прогресс. Диаграмма представляет демонстрационный сценарий, не производственные данные.</desc>
+<rect width="1280" height="520" rx="18" fill="#101c26"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<rect x="55" y="48" width="35" height="35" rx="9" fill="#baf36b"/><path d="M66 72V59h6v13m5 0V59h5m-10 7h10" stroke="#101c26" stroke-width="2.5" fill="none"/>
+<text x="105" y="73" fill="#f5f5f0" font-size="23" font-weight="700">FB Autoload</text><text x="1195" y="70" fill="#a3b7c1" font-size="12" text-anchor="end" letter-spacing="2">ENGINEERING CASE STUDY</text>
+<text x="55" y="188" fill="#f5f5f0" font-size="60" font-weight="700" letter-spacing="-2">Рекламные операции.</text>
+<text x="55" y="258" fill="#baf36b" font-size="60" font-weight="700" letter-spacing="-2">Под контролем.</text>
+<text x="58" y="310" fill="#b6c4cd" font-size="20">Запуски · восстановление · отчётность</text>
+<path d="M55 369h1170" stroke="#34454f"/>
+<text x="58" y="412" fill="#f5f5f0" font-size="16">Node.js / SQLite / Playwright / API</text>
+<text x="58" y="449" fill="#9aafb9" font-size="13">Собственный рабочий продукт, разработанный с нейросетями</text>
+<g transform="translate(835 147)"><rect width="355" height="166" rx="9" fill="#1b2b35" stroke="#41525d"/><text x="20" y="32" fill="#a1b5c0" font-size="10" letter-spacing="1.5">WORKFLOW / DEMO</text><path d="M34 66v56" stroke="#6f855e" stroke-width="2"/><circle cx="34" cy="67" r="9" fill="#baf36b"/><circle cx="34" cy="101" r="9" fill="#baf36b"/><circle cx="34" cy="135" r="9" fill="#1b2b35" stroke="#baf36b" stroke-width="2"/><text x="57" y="72" fill="#e0e8ed" font-size="13">Проверить</text><text x="57" y="106" fill="#e0e8ed" font-size="13">Сохранить прогресс</text><text x="57" y="140" fill="#baf36b" font-size="13">Продолжить, не повторить</text></g>
+<text x="1190" y="418" text-anchor="end" fill="#baf36b" font-size="15">Shared code. Separate state.</text><text x="1190" y="450" text-anchor="end" fill="#9aafb9" font-size="12">Публичная витрина закрытого проекта</text>
+</g></svg>
