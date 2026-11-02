@@ -15,10 +15,10 @@
 
 - `README.md`, `PUBLISHING.md`, `.gitignore`, `package.json`, `FB-Autoload.html`
 - `docs/engineering.md`
-- `dist/index.html`, `dist/style.css`, `dist/app.js`, `dist/recovery.mjs`
+- `dist/index.html`, `dist/style.css`, `dist/app.js`, `dist/recovery.mjs`, `dist/launch-demo.mjs`
 - `dist/assets/cover.svg`, `dist/assets/mark.svg`
 - `scripts/preview.mjs`, `scripts/check-public.mjs`, `scripts/build-preview.mjs`
-- `tests/recovery.test.mjs`
+- `tests/recovery.test.mjs`, `tests/launch-demo.test.mjs`
 - `.github/workflows/pages.yml`
 
 GitHub Pages должен обслуживать **только `dist/`**. Страница использует относительные пути: она подходит и для корня домена, и для пути репозитория. Workflow `Verify and publish showcase` проверяет тесты, точный состав файлов и воспроизводимость автономной версии перед публикацией. В настройках репозитория источник Pages должен быть `GitHub Actions`.
