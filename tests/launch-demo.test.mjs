@@ -147,6 +147,26 @@ test("reset returns a clean draft without retaining earlier results", () => {
   assert.equal(Object.isFrozen(DEMO_ACCOUNTS), true);
 });
 
+test("project scale identifies measured production scope without inflating test counts", () => {
+  const html = readFileSync(new URL("../dist/index.html", import.meta.url), "utf8");
+  const readme = readFileSync(new URL("../README.md", import.meta.url), "utf8");
+  const scale = html.match(/<section class="project-scale[\s\S]*?<\/section>/)?.[0];
+  assert.ok(scale);
+  assert.equal((scale.match(/<dt>/g) || []).length, 4);
+  assert.ok(scale.includes('aria-labelledby="scale-title"'));
+  assert.ok(scale.includes('datetime="2026-11-02"'));
+  for (const value of ["219", "276", "≈79", "≈25", "Meta, AdsPower, Dolphin, Keitaro, PWA Partners, Telegram"]) {
+    assert.ok(scale.includes(value), `Missing website measurement ${value}`);
+    assert.ok(readme.includes(value), `Missing README measurement ${value}`);
+  }
+  for (const source of [scale, readme]) {
+    assert.ok(source.includes("комментарии и пустые строки"));
+    assert.ok(source.includes("не отдельных тест-кейсов"));
+  }
+  assert.ok(scale.includes("Не размер этой страницы"));
+  assert.ok(readme.includes("не этого публичного репозитория"));
+});
+
 test("only the demo section is replaced, with explicit simulation boundaries", () => {
   const html = readFileSync(new URL("../dist/index.html", import.meta.url), "utf8");
   const app = readFileSync(new URL("../dist/app.js", import.meta.url), "utf8");
